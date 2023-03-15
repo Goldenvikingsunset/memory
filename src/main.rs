@@ -4,17 +4,53 @@ fn main() {
 
 slint::slint! {
     MemoryTile := Rectangle {
+        callback clicked;
+        property <bool> open_curtain;
+        property <bool> solved;
+        property <image> icon;
+
         width: 64px;
         height: 64px;
-        background: #3960d5;
+        background:solved ? #34CE57 : #3960d5;
+        animate background {duration: 800ms;}
     
         Image {
-            source:@image-url("memory/target/icons/bus.png");
+            source: icon;
             width: parent.width;
             height: parent.height;
         }
+
+        //Left curtain
+        Rectangle { 
+            background: #193076;
+            width: open_curtain ? 0px : (parent.width / 2);
+            height: parent.height;
+            animate width { duration: 250ms; easing: ease-in;}
+         }
+
+         //Right curtain
+        Rectangle {
+            background: #193076;
+            x: open_curtain ? parent.width : (parent.width / 2);
+            width: open_curtain ? 0px : (parent.width / 2);
+            height: parent.height;
+            animate width {duration: 250ms; easing: ease-in;}
+            animate x {duration: 250ms; easing: ease-in;}
+        }
+
+        TouchArea { 
+            clicked => {
+                // Deligate to the user of this element
+                root.clicked();
+            }
+         }
     }
 MainWindow := Window {
-    MemoryTile {}
+    MemoryTile {
+        icon: @image-url("icons/bus.png");
+        clicked => {
+            self.open_curtain = !self.open_curtain;
+        }
+    }
 }
 }
