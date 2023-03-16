@@ -53,7 +53,7 @@ slint::slint! {
     }
 MainWindow := Window {
     width: 350px;
-    height: 350px;
+    height: 420px;
 
     property <[TileData]> memory_tiles: [
         { image: @image-url("icons/Leeds_United.png")},
@@ -74,6 +74,8 @@ MainWindow := Window {
         { image: @image-url("icons/west_ham.png")},
         { image: @image-url("icons/spurs.png")},
         { image: @image-url("icons/wolves.png")},
+        { image: @image-url("icons/brentford.png")},
+        { image: @image-url("icons/forest.png")},
     ];
     for tile[i] in memory_tiles : MemoryTile {
         x: mod(i, 4) *80px;
