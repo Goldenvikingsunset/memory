@@ -73,7 +73,7 @@ MainWindow := Window {
         { image: @image-url("icons/palace.png")},
         { image: @image-url("icons/west_ham.png")},
         { image: @image-url("icons/spurs.png")},
-        { image: @image-url("icons/wolves.png)")},
+        { image: @image-url("icons/wolves.png")},
     ];
     for tile[i] in memory_tiles : MemoryTile {
         x: mod(i, 4) *80px;
