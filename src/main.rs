@@ -1,5 +1,23 @@
 fn main() {
-    MainWindow::new().run();
+    use slint::Model;
+
+    let main_window = MainWindow::new();
+
+    //Fetch the tiles from the model
+    let mut tiles: Vec<TileData> = main_window.get_memory_tiles().iter().collect();
+    // Duplicate them to ensure that we have pairs
+    tiles.extend(tiles.clone());
+
+    // Randomly mix the tiles
+    use rand::seq::SliceRandom;
+    let mut rng = rand::thread_rng();
+    tiles.shuffle(&mut rng);
+
+    // Assign the suffled Vec to the model prperty
+    let tiles_model = std::rc::Rc::new(slint::VecModel::from(tiles));
+    main_window.set_memory_tiles(tiles_model.into());
+
+    main_window.run();
 }
 
 slint::slint! {
@@ -17,7 +35,7 @@ slint::slint! {
 
         width: 74px;
         height: 74px;
-        background:solved ? #1f830bd8 : #d1d6e4;
+        background:solved ? #1f830bd8 : #fdfdff;
         animate background {duration: 800ms;}
     
         Image {
@@ -28,7 +46,7 @@ slint::slint! {
 
         //Left curtain
         Rectangle { 
-            background: #2655ac;
+            background: #510a94;
             width: open_curtain ? 0px : (parent.width / 2);
             height: parent.height;
             animate width { duration: 250ms; easing: ease-in;}
@@ -36,7 +54,7 @@ slint::slint! {
 
          //Right curtain
         Rectangle {
-            background: #2655ac;
+            background: #510a94;
             x: open_curtain ? parent.width : (parent.width / 2);
             width: open_curtain ? 0px : (parent.width / 2);
             height: parent.height;
@@ -52,8 +70,9 @@ slint::slint! {
          }
     }
 MainWindow := Window {
-    width: 350px;
-    height: 420px;
+    width: 395px;
+    height: 640px;
+    background: #04795f;
 
     property <[TileData]> memory_tiles: [
         { image: @image-url("icons/Leeds_United.png")},
@@ -78,8 +97,8 @@ MainWindow := Window {
         { image: @image-url("icons/forest.png")},
     ];
     for tile[i] in memory_tiles : MemoryTile {
-        x: mod(i, 4) *80px;
-        y: floor(i/4) *80px;
+        x: mod(i, 5) *80px;
+        y: floor(i/5) *80px;
         width: 74px;
         height: 74px;
         icon: tile.image;
